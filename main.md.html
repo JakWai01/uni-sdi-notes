@@ -169,7 +169,11 @@
 <li><a href="#apt"><span class="toc-section-number">1.5</span> APT</a></li>
 <li><a href="#cockpit"><span class="toc-section-number">1.6</span> Cockpit</a></li>
 <li><a href="#caddy"><span class="toc-section-number">1.7</span> Caddy</a></li>
-<li><a href="#dns"><span class="toc-section-number">1.8</span> DNS</a></li>
+<li><a href="#dns"><span class="toc-section-number">1.8</span> DNS</a>
+<ul>
+<li><a href="#manager"><span class="toc-section-number">1.8.1</span> Manager</a></li>
+<li><a href="#worker"><span class="toc-section-number">1.8.2</span> Worker</a></li>
+</ul></li>
 </ul></li>
 </ul>
 </nav>
@@ -252,6 +256,7 @@ sudo systemctl enable --now caddy
 sudo systemctl reload caddy # Now visit https://cockpit.felixs-sdi1.alphahorizon.io/
 sudo ufw allow &#39;WWW Secure&#39;</code></pre>
 <h2 data-number="1.8" id="dns"><span class="header-section-number">1.8</span> DNS</h2>
+<h3 data-number="1.8.1" id="manager"><span class="header-section-number">1.8.1</span> Manager</h3>
 <pre class="shell"><code>sudo apt update
 sudo apt install -y bind9 bind9utils
 sudo systemctl enable --now named
@@ -275,7 +280,7 @@ sudo tee /etc/bind/db.example.pojtinger &lt;&lt;EOT
 $ORIGIN example.pojtinger.
 $TTL 3600
 
-example.pojtinger.      IN      SOA     ns1.example.pojtinger. hostmaster.example.pojtinger.    ( 1634567634 7200 3600 1209600 3600 )
+example.pojtinger.      IN      SOA     ns1.example.pojtinger. hostmaster.example.pojtinger.    ( 1634570712 7200 3600 1209600 3600 )
 
 example.pojtinger.      IN      NS      ns1.example.pojtinger.
 example.pojtinger.      IN      NS      ns2.example.pojtinger.
@@ -287,13 +292,37 @@ example.pojtinger.      IN      AAAA    2a03:b0c0:3:d0::e34:5001
 ns1.example.pojtinger.  IN      A       138.68.70.72
 ns1.example.pojtinger.  IN      AAAA    2a03:b0c0:3:d0::e34:5001
 
-ns2.example.pojtinger.  IN      A       138.68.70.72
-ns2.example.pojtinger.  IN      AAAA    2a03:b0c0:3:d0::e34:5001
+ns2.example.pojtinger.  IN      A       159.223.25.154
+ns2.example.pojtinger.  IN      AAAA    2a03:b0c0:3:d0::1092:b001
 EOT
 
 sudo named-checkconf
 sudo named-checkzone example.pojtinger /etc/bind/db.example.pojtinger
 
+sudo systemctl reload named
+
+sudo ufw allow &#39;DNS&#39;</code></pre>
+<h3 data-number="1.8.2" id="worker"><span class="header-section-number">1.8.2</span> Worker</h3>
+<pre class="shell"><code>sudo apt update
+sudo apt install -y bind9 bind9utils
+sudo systemctl enable --now named
+
+sudo vi /etc/bind/named.conf.options # Now add the following at the end of the options block:
+version &quot;not currently available&quot;;
+recursion no;
+querylog yes;
+allow-transfer { none; };
+
+sudo tee -a /etc/bind/named.conf.local &lt;&lt;EOT
+zone &quot;example.pojtinger&quot; {
+        type slave;
+        file &quot;db.example.pojtinger&quot;;
+        allow-query { any; };
+        masters { 138.68.70.72; };
+};
+EOT
+
+sudo named-checkconf
 sudo systemctl reload named
 
 sudo ufw allow &#39;DNS&#39;</code></pre>
