@@ -250,6 +250,12 @@ $ sudo systemctl enable --now docker
 $ sudo mkdir -p /etc/traefik
 $ sudo tee /etc/traefik/traefik.yaml&lt;&lt;&#39;EOT&#39;
 entryPoints:
+  dnsTcp:
+    address: &quot;:53&quot;
+
+  dnsUdp:
+    address: &quot;:53/udp&quot;
+
   web:
     address: &quot;:80&quot;
 
@@ -279,8 +285,25 @@ log:
   level: INFO
 EOT
 $ sudo tee /etc/traefik/services.yaml&lt;&lt;&#39;EOT&#39;
+udp:
+  routers:
+    dns:
+      entryPoints:
+        - dnsUdp
+      service: dns
+  services:
+    dns:
+      loadBalancer:
+        servers:
+          - address: localhost:54
+
 tcp:
   routers:
+    dns:
+      entryPoints:
+        - dnsTcp
+      rule: HostSNI(`*`)
+      service: dns
     ssh:
       entryPoints:
         - websecurealt
@@ -305,6 +328,10 @@ tcp:
         domains:
           - main: ldap.felixs-sdi1.alphahorizon.io
   services:
+    dns:
+      loadBalancer:
+        servers:
+          - address: localhost:54
     ssh:
       loadBalancer:
         servers:
@@ -355,6 +382,7 @@ tcp:
       insecureSkipVerify: true
 EOT
 $ sudo docker run -d --net=host -v /var/lib/traefik/:/var/lib/traefik -v /etc/traefik/:/etc/traefik --name traefik traefik:v2.5
+$ sudo ufw allow &#39;DNS&#39;
 $ sudo ufw allow &#39;WWW&#39;
 $ sudo ufw allow &#39;WWW Secure&#39; # Now visit https://cockpit.felixs-sdi1.alphahorizon.io/
 $ sudo ufw allow &#39;8443/tcp&#39;
@@ -372,6 +400,9 @@ sudo apt install -y bind9 bind9utils
 sudo systemctl enable --now named
 
 sudo vi /etc/bind/named.conf.options # Now add the following at the end of the options block:
+listen-on port 54 { 127.0.0.1; };
+listen-on-v6 port 54 { ::1; };
+
 version &quot;not currently available&quot;;
 recursion yes;
 querylog yes;
@@ -456,15 +487,16 @@ sudo named-checkzone example.pojtinger /etc/bind/db.example.pojtinger
 sudo named-checkzone 70.68.138.in-addr.arpa. /etc/bind/db.70.68.138
 sudo named-checkzone 1.0.0.5.4.3.e.0.0.0.0.0.0.0.0.0.0.d.0.0.3.0.0.0.0.c.0.b.3.0.a.2.ip6.arpa. /etc/bind/db.1.0.0.5.4.3.e.0.0.0.0.0.0.0.0.0.0.d.0.0.3.0.0.0.0.c.0.b.3.0.a.2
 
-sudo systemctl reload named
-
-sudo ufw allow &#39;DNS&#39;</code></pre>
+sudo systemctl reload named</code></pre>
 <h3 data-number="1.9.2" id="worker"><span class="header-section-number">1.9.2</span> Worker</h3>
 <pre class="shell"><code>sudo apt update
 sudo apt install -y bind9 bind9utils
 sudo systemctl enable --now named
 
 sudo vi /etc/bind/named.conf.options # Now add the following at the end of the options block:
+listen-on port 54 { 127.0.0.1; };
+listen-on-v6 port 54 { ::1; };
+
 version &quot;not currently available&quot;;
 recursion yes;
 querylog yes;
@@ -495,9 +527,7 @@ zone &quot;1.0.0.5.4.3.e.0.0.0.0.0.0.0.0.0.0.d.0.0.3.0.0.0.0.c.0.b.3.0.a.2.ip6.a
 EOT
 
 sudo named-checkconf
-sudo systemctl reload named
-
-sudo ufw allow &#39;DNS&#39;</code></pre>
+sudo systemctl reload named</code></pre>
 <h3 data-number="1.9.3" id="exercises"><span class="header-section-number">1.9.3</span> Exercises</h3>
 <p><strong>Use the dig command to query A/CNAME/MX/NS records from various machines/domains of your choice. Then execute reverse lookups as well.</strong></p>
 <pre class="shell"><code># Get A/AAA records from manager server
