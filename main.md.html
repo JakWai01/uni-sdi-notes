@@ -178,6 +178,7 @@
 </ul></li>
 <li><a href="#ldap"><span class="toc-section-number">1.10</span> LDAP</a></li>
 <li><a href="#apache"><span class="toc-section-number">1.11</span> Apache</a></li>
+<li><a href="#mariadb"><span class="toc-section-number">1.12</span> MariaDB</a></li>
 </ul></li>
 </ul>
 </nav>
@@ -362,6 +363,15 @@ http:
           - main: marx.apache.felixs-sdi1.alphahorizon.io
           - main: kropotkin.apache.felixs-sdi1.alphahorizon.io
           - main: secure.apache.felixs-sdi1.alphahorizon.io
+      service: apache
+      entryPoints:
+        - websecure
+    phpmyadmin:
+      rule: Host(`phpmyadmin.felixs-sdi1.alphahorizon.io`)
+      tls:
+        certResolver: letsencrypt
+        domains:
+          - main: phpmyadmin.felixs-sdi1.alphahorizon.io
       service: apache
       entryPoints:
         - websecure
@@ -886,5 +896,52 @@ ldapwhoami -H &#39;ldap://localhost:389&#39; -W -D uid=bean,ou=devel,ou=software
 
 curl https://secure.apache.felixs-sdi1.alphahorizon.io/ # Try to access the secure site anonymously (401 Unauthorized)
 curl -u bean:password https://secure.apache.felixs-sdi1.alphahorizon.io/ # Access the secure site as bean (or anyone else in ou=devel,ou=software) with password &quot;password&quot; (you can also open it using a browser)</code></pre>
+<h2 data-number="1.12" id="mariadb"><span class="header-section-number">1.12</span> MariaDB</h2>
+<pre class="shell"><code>sudo apt update
+sudo apt install -y mariadb-server
+sudo mysql_secure_installation # Empty string, y, y, yourpassword, yourpassword, y, y, y, y
+
+sudo mysql -u root -e &#39;GRANT ALL PRIVILEGES ON *.* TO &#39;phpmyadmin&#39;@&#39;localhost&#39; WITH GRANT OPTION;&#39;
+
+sudo apt install -y phpmyadmin libapache2-mod-php # apache2, y, yourpassword, yourpassword
+sudo phpenmod mbstring
+
+sudo a2disconf phpmyadmin
+
+sudo tee /etc/apache2/sites-available/phpmyadmin.felixs-sdi1.alphahorizon.io.conf &lt;&lt;&#39;EOT&#39;
+&lt;VirtualHost *:8080&gt;
+        ServerName felixs-sdi1.alphahorizon.io
+        ServerAlias phpmyadmin.felixs-sdi1.alphahorizon.io
+
+        ServerAdmin webmaster@alphahorizon.io
+        DocumentRoot /usr/share/phpmyadmin
+
+        ErrorLog ${APACHE_LOG_DIR}/error.log
+        CustomLog ${APACHE_LOG_DIR}/access.log combined
+
+        &lt;Directory &quot;/usr/share/phpmyadmin&quot;&gt;
+            Options SymLinksIfOwnerMatch
+            DirectoryIndex index.php
+
+            # limit libapache2-mod-php to files and directories necessary by pma
+            &lt;IfModule mod_php7.c&gt;
+                php_admin_value upload_tmp_dir /var/lib/phpmyadmin/tmp
+                php_admin_value open_basedir /usr/share/phpmyadmin/:/usr/share/doc/phpmyadmin/:/etc/phpmyadmin/:/var/lib/phpmyadmin/:/usr/share/php/:/usr/share/javascript/
+            &lt;/IfModule&gt;
+        &lt;/Directory&gt;
+
+        # Disallow web access to directories that don&#39;t need it
+        &lt;Directory /usr/share/phpmyadmin/templates&gt;
+            Require all denied
+        &lt;/Directory&gt;
+        &lt;Directory /usr/share/phpmyadmin/libraries&gt;
+            Require all denied
+        &lt;/Directory&gt;
+&lt;/VirtualHost&gt;
+EOT
+sudo a2ensite phpmyadmin.felixs-sdi1.alphahorizon.io
+sudo systemctl reload apache2
+
+# Now visit https://phpmyadmin.felixs-sdi1.alphahorizon.io/ and login as root using yourpassword</code></pre>
 </body>
 </html>
