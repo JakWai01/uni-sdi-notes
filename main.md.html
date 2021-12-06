@@ -178,7 +178,8 @@
 </ul></li>
 <li><a href="#ldap"><span class="toc-section-number">1.10</span> LDAP</a></li>
 <li><a href="#apache"><span class="toc-section-number">1.11</span> Apache</a></li>
-<li><a href="#mariadb"><span class="toc-section-number">1.12</span> MariaDB</a></li>
+<li><a href="#mariadb-and-phpmyadmin"><span class="toc-section-number">1.12</span> MariaDB and phpMyAdmin</a></li>
+<li><a href="#ldap-account-manager"><span class="toc-section-number">1.13</span> LDAP Account Manager</a></li>
 </ul></li>
 </ul>
 </nav>
@@ -372,6 +373,15 @@ http:
         certResolver: letsencrypt
         domains:
           - main: phpmyadmin.felixs-sdi1.alphahorizon.io
+      service: apache
+      entryPoints:
+        - websecure
+    ldapAccountManager:
+      rule: Host(`ldap-account-manager.felixs-sdi1.alphahorizon.io`)
+      tls:
+        certResolver: letsencrypt
+        domains:
+          - main: ldap-account-manager.felixs-sdi1.alphahorizon.io
       service: apache
       entryPoints:
         - websecure
@@ -896,7 +906,7 @@ ldapwhoami -H &#39;ldap://localhost:389&#39; -W -D uid=bean,ou=devel,ou=software
 
 curl https://secure.apache.felixs-sdi1.alphahorizon.io/ # Try to access the secure site anonymously (401 Unauthorized)
 curl -u bean:password https://secure.apache.felixs-sdi1.alphahorizon.io/ # Access the secure site as bean (or anyone else in ou=devel,ou=software) with password &quot;password&quot; (you can also open it using a browser)</code></pre>
-<h2 data-number="1.12" id="mariadb"><span class="header-section-number">1.12</span> MariaDB</h2>
+<h2 data-number="1.12" id="mariadb-and-phpmyadmin"><span class="header-section-number">1.12</span> MariaDB and phpMyAdmin</h2>
 <pre class="shell"><code>sudo apt update
 sudo apt install -y mariadb-server
 sudo mysql_secure_installation # Empty string, y, y, yourpassword, yourpassword, y, y, y, y
@@ -931,10 +941,10 @@ sudo tee /etc/apache2/sites-available/phpmyadmin.felixs-sdi1.alphahorizon.io.con
         &lt;/Directory&gt;
 
         # Disallow web access to directories that don&#39;t need it
-        &lt;Directory /usr/share/phpmyadmin/templates&gt;
+        &lt;Directory &quot;/usr/share/phpmyadmin/templates&quot;&gt;
             Require all denied
         &lt;/Directory&gt;
-        &lt;Directory /usr/share/phpmyadmin/libraries&gt;
+        &lt;Directory &quot;/usr/share/phpmyadmin/libraries&quot;&gt;
             Require all denied
         &lt;/Directory&gt;
 &lt;/VirtualHost&gt;
@@ -943,5 +953,81 @@ sudo a2ensite phpmyadmin.felixs-sdi1.alphahorizon.io
 sudo systemctl reload apache2
 
 # Now visit https://phpmyadmin.felixs-sdi1.alphahorizon.io/ and login as root using yourpassword</code></pre>
+<h2 data-number="1.13" id="ldap-account-manager"><span class="header-section-number">1.13</span> LDAP Account Manager</h2>
+<pre class="shell"><code>sudo apt update
+sudo apt install -y ldap-account-manager
+
+sudo a2disconf ldap-account-manager
+
+sudo tee /etc/apache2/sites-available/ldap-account-manager.felixs-sdi1.alphahorizon.io.conf &lt;&lt;&#39;EOT&#39;
+&lt;VirtualHost *:8080&gt;
+        ServerName felixs-sdi1.alphahorizon.io
+        ServerAlias ldap-account-manager.felixs-sdi1.alphahorizon.io
+
+        ServerAdmin webmaster@alphahorizon.io
+        DocumentRoot /usr/share/ldap-account-manager
+
+        ErrorLog ${APACHE_LOG_DIR}/error.log
+        CustomLog ${APACHE_LOG_DIR}/access.log combined
+
+        &lt;Directory &quot;/usr/share/ldap-account-manager&quot;&gt;
+          Options +FollowSymLinks
+          AllowOverride All
+          Require all granted
+          DirectoryIndex index.html
+        &lt;/Directory&gt;
+
+        &lt;Directory &quot;/var/lib/ldap-account-manager/tmp&quot;&gt;
+          Options -Indexes
+        &lt;/Directory&gt;
+
+        &lt;Directory &quot;/var/lib/ldap-account-manager/tmp/internal&quot;&gt;
+          Options -Indexes
+          Require all denied
+        &lt;/Directory&gt;
+
+        &lt;Directory &quot;/var/lib/ldap-account-manager/sess&quot;&gt;
+          Options -Indexes
+          Require all denied
+        &lt;/Directory&gt;
+
+        &lt;Directory &quot;/var/lib/ldap-account-manager/config&quot;&gt;
+          Options -Indexes
+          Require all denied
+        &lt;/Directory&gt;
+
+        &lt;Directory &quot;/usr/share/ldap-account-manager/lib&quot;&gt;
+          Options -Indexes
+          Require all denied
+        &lt;/Directory&gt;
+
+        &lt;Directory &quot;/usr/share/ldap-account-manager/help&quot;&gt;
+          Options -Indexes
+          Require all denied
+        &lt;/Directory&gt;
+
+        &lt;Directory &quot;/usr/share/ldap-account-manager/locale&quot;&gt;
+          Options -Indexes
+          Require all denied
+        &lt;/Directory&gt;
+&lt;/VirtualHost&gt;
+EOT
+sudo a2ensite ldap-account-manager.felixs-sdi1.alphahorizon.io
+sudo systemctl reload apache2
+
+# Now visit https://ldap-account-manager.felixs-sdi1.alphahorizon.io/templates/config/mainlogin.php, login with `lam` as the master password
+# - Don&#39;t encrypt session
+# - Use `ldap://localhost:389/` as the server (where `ldaps://` is the default)
+# - Set the new master password
+
+# Now visit https://ldap-account-manager.felixs-sdi1.alphahorizon.io/templates/config/confmain.php, and login with `lam` as the profile password
+# - Set `dc=ldap,dc=felixs-sdi1,dc=alphahorizon,dc=io` as the tree suffix
+# - Set `cn=admin,dc=ldap,dc=felixs-sdi1,dc=alphahorizon,dc=io` as the list of valid users
+# - Set SSH key file to empty string
+# - Set the profile password to yourpassword
+# - Set Users LDAP suffix under &quot;Account types&quot; to `ou=devel,ou=software,ou=departments,dc=ldap,dc=felixs-sdi1,dc=alphahorizon,dc=io`
+# - Delete &quot;groups&quot; under &quot;Account types&quot;
+
+# Now visit https://ldap-account-manager.felixs-sdi1.alphahorizon.io/templates/login.php and login with your the LDAP admin account password</code></pre>
 </body>
 </html>
