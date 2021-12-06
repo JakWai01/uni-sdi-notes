@@ -238,6 +238,7 @@ http:
           - main: apache.felixs-sdi1.alphahorizon.io
           - main: marx.apache.felixs-sdi1.alphahorizon.io
           - main: kropotkin.apache.felixs-sdi1.alphahorizon.io
+          - main: secure.apache.felixs-sdi1.alphahorizon.io
       service: apache
       entryPoints:
         - websecure
@@ -497,7 +498,7 @@ ldapwhoami -H &#39;ldaps://ldap.felixs-sdi1.alphahorizon.io:443&#39; -x # Anonym
 ldapwhoami -H &#39;ldaps://ldap.felixs-sdi1.alphahorizon.io:443&#39; -W -D cn=admin,dc=ldap,dc=felixs-sdi1,dc=alphahorizon,dc=io # As admin
 
 # Now add the objects:
-ldapadd -H &#39;ldaps://ldap.felixs-sdi1.alphahorizon.io:443&#39; -W -D cn=admin,dc=ldap,dc=felixs-sdi1,dc=alphahorizon,dc=io -f extended.ldif  &lt;&lt;&#39;EOT&#39;
+ldapadd -H &#39;ldaps://ldap.felixs-sdi1.alphahorizon.io:443&#39; -W -D cn=admin,dc=ldap,dc=felixs-sdi1,dc=alphahorizon,dc=io &lt;&lt;&#39;EOT&#39;
 version: 1
 
 dn: dc=ldap,dc=felixs-sdi1,dc=alphahorizon,dc=io
@@ -562,7 +563,7 @@ sn: Smith
 givenName: Jane
 mail: smith@ldap.felixs-sdi1.alphahorizon.io
 uid: smith
-userPassword:: e3NtZDV9YVhKL2JlVkF2TDRENk9pMFRLcDhjM3ovYTZQZzBXeHA=
+userPassword:: e1NTSEF9NGxCMnc4dThQRXI5Rjd3VGZjN3ltNWkwUDk5N3dOeS8=
 
 dn: uid=waibel,ou=financial,ou=departments,dc=ldap,dc=felixs-sdi1,dc=alphahorizon,dc=io
 objectClass: inetOrgPerson
@@ -578,7 +579,7 @@ uid: waibel
 uidNumber: 1337
 givenName: Jakob
 mail: waibel@ldap.felixs-sdi1.alphahorizon.io
-userPassword:: e3NtZDV9YVhKL2JlVkF2TDRENk9pMFRLcDhjM3ovYTZQZzBXeHA=
+userPassword:: e1NTSEF9NGxCMnc4dThQRXI5Rjd3VGZjN3ltNWkwUDk5N3dOeS8=
 
 dn: uid=simpson,ou=financial,ou=departments,dc=ldap,dc=felixs-sdi1,dc=alphahorizon,dc=io
 objectClass: inetOrgPerson
@@ -590,7 +591,7 @@ sn: Simpson
 givenName: Homer
 mail: simpson@ldap.felixs-sdi1.alphahorizon.io
 uid: simpson
-userPassword:: e3NtZDV9YVhKL2JlVkF2TDRENk9pMFRLcDhjM3ovYTZQZzBXeHA=
+userPassword:: e1NTSEF9NGxCMnc4dThQRXI5Rjd3VGZjN3ltNWkwUDk5N3dOeS8=
 
 dn: uid=pojtinger,ou=testing,ou=software,ou=departments,dc=ldap,dc=felixs-sdi1,dc=alphahorizon,dc=io
 objectClass: inetOrgPerson
@@ -602,7 +603,7 @@ sn: Pojtinger
 givenName: Felix
 mail: pojtinger@ldap.felixs-sdi1.alphahorizon.io
 uid: pojtinger
-userPassword:: e3NtZDV9YVhKL2JlVkF2TDRENk9pMFRLcDhjM3ovYTZQZzBXeHA=
+userPassword:: e1NTSEF9NGxCMnc4dThQRXI5Rjd3VGZjN3ltNWkwUDk5N3dOeS8=
 
 dn: uid=simpson,ou=testing,ou=software,ou=departments,dc=ldap,dc=felixs-sdi1,dc=alphahorizon,dc=io
 objectClass: inetOrgPerson
@@ -614,7 +615,7 @@ sn: Simpson
 givenName: Maggie
 mail: simpson@ldap.felixs-sdi1.alphahorizon.io
 uid: simpson
-userPassword:: e3NtZDV9YVhKL2JlVkF2TDRENk9pMFRLcDhjM3ovYTZQZzBXeHA=
+userPassword:: e1NTSEF9NGxCMnc4dThQRXI5Rjd3VGZjN3ltNWkwUDk5N3dOeS8=
 
 dn: uid=aleimut,ou=devel,ou=software,ou=departments,dc=ldap,dc=felixs-sdi1,dc=alphahorizon,dc=io
 objectClass: inetOrgPerson
@@ -626,7 +627,7 @@ sn: Aleimut
 givenName: Adelheit
 mail: aleimut@ldap.felixs-sdi1.alphahorizon.io
 uid: aleimut
-userPassword:: e3NtZDV9YVhKL2JlVkF2TDRENk9pMFRLcDhjM3ovYTZQZzBXeHA=
+userPassword:: e1NTSEF9NGxCMnc4dThQRXI5Rjd3VGZjN3ltNWkwUDk5N3dOeS8=
 
 dn: uid=tibbie,ou=testing,ou=software,ou=departments,dc=ldap,dc=felixs-sdi1,dc=alphahorizon,dc=io
 objectClass: inetOrgPerson
@@ -642,8 +643,11 @@ uid: tibbie
 uidNumber: 1234
 givenName: Oswald
 mail: tibbie@ldap.felixs-sdi1.alphahorizon.io
-userPassword:: e3NtZDV9YVhKL2JlVkF2TDRENk9pMFRLcDhjM3ovYTZQZzBXeHA=
-EOT</code></pre>
+userPassword:: e1NTSEF9NGxCMnc4dThQRXI5Rjd3VGZjN3ltNWkwUDk5N3dOeS8=
+EOT
+
+# And test if we can access using a user
+ldapwhoami -H &#39;ldaps://ldap.felixs-sdi1.alphahorizon.io:443&#39; -W -D uid=bean,ou=devel,ou=software,ou=departments,dc=ldap,dc=felixs-sdi1,dc=alphahorizon,dc=io # As bean using password &quot;password&quot;</code></pre>
 </div>
 
 <div id="apache" class="title-slide slide section level2" number="1.11">
@@ -747,7 +751,41 @@ EOT
 sudo a2ensite kropotkin.apache.felixs-sdi1.alphahorizon.io
 sudo systemctl reload apache2
 
-curl https://kropotkin.apache.felixs-sdi1.alphahorizon.io/ # Access the Kropotkin site</code></pre>
+curl https://kropotkin.apache.felixs-sdi1.alphahorizon.io/ # Access the Kropotkin site
+
+sudo mkdir -p /var/www/secure.apache.felixs-sdi1.alphahorizon.io
+echo &#39;&lt;h1&gt;Super secure content!&lt;/h1&gt;&#39; | sudo tee /var/www/secure.apache.felixs-sdi1.alphahorizon.io/index.html
+sudo tee /etc/apache2/sites-available/secure.apache.felixs-sdi1.alphahorizon.io.conf &lt;&lt;&#39;EOT&#39;
+&lt;VirtualHost *:8080&gt;
+        ServerName felixs-sdi1.alphahorizon.io
+        ServerAlias secure.apache.felixs-sdi1.alphahorizon.io
+
+        ServerAdmin webmaster@alphahorizon.io
+        DocumentRoot /var/www/secure.apache.felixs-sdi1.alphahorizon.io
+
+        ErrorLog ${APACHE_LOG_DIR}/error.log
+        CustomLog ${APACHE_LOG_DIR}/access.log combined
+
+        &lt;Directory &quot;/var/www/secure.apache.felixs-sdi1.alphahorizon.io&quot;&gt;
+                Options Indexes FollowSymLinks
+                AllowOverride None
+
+                AuthType Basic
+                AuthBasicProvider ldap
+                AuthName &quot;Please enter your LDAP username and password&quot;
+                AuthLDAPURL &quot;ldap://localhost:389/ou=devel,ou=software,ou=departments,dc=ldap,dc=felixs-sdi1,dc=alphahorizon,dc=io&quot;
+                Require valid-user
+        &lt;/Directory&gt;
+&lt;/VirtualHost&gt;
+EOT
+sudo a2enmod authnz_ldap
+sudo a2ensite secure.apache.felixs-sdi1.alphahorizon.io
+sudo systemctl reload apache2
+
+ldapwhoami -H &#39;ldap://localhost:389&#39; -W -D uid=bean,ou=devel,ou=software,ou=departments,dc=ldap,dc=felixs-sdi1,dc=alphahorizon,dc=io # Connect to local LDAP server as bean using password &quot;password&quot;
+
+curl https://secure.apache.felixs-sdi1.alphahorizon.io/ # Try to access the secure site anonymously (401 Unauthorized)
+curl -u bean:password https://secure.apache.felixs-sdi1.alphahorizon.io/ # Access the secure site as bean (or anyone else in ou=devel,ou=software) with password &quot;password&quot; (you can also open it using a browser)</code></pre>
 </div>
 
 </body>
