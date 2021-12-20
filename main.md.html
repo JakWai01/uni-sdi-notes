@@ -271,6 +271,9 @@ entryPoints:
   websecurealt:
     address: &quot;:8443&quot;
 
+  metrics:
+    address: &quot;localhost:8082&quot;
+
 providers:
   file:
     filename: /etc/traefik/services.yaml
@@ -289,6 +292,10 @@ certificatesResolvers:
 
 log:
   level: INFO
+
+metrics:
+  prometheus:
+    entryPoint: metrics
 EOT
 $ sudo tee /etc/traefik/services.yaml&lt;&lt;&#39;EOT&#39;
 udp:
@@ -1146,7 +1153,39 @@ curl https://nextcloud.felixs-sdi1.alphahorizon.io/ # Access the Nextcloud insta
 <pre class="shell"><code>sudo apt update
 sudo apt install -y prometheus
 
-sudo systemctl enable --now prometheus</code></pre>
+sudo systemctl enable --now prometheus
+
+sudo tee /etc/prometheus/prometheus.yml &lt;&lt;&#39;EOT&#39;
+global:
+  scrape_interval:     15s
+  evaluation_interval: 15s
+  external_labels:
+      monitor: &#39;example&#39;
+
+alerting:
+  alertmanagers:
+  - static_configs:
+    - targets: [&#39;localhost:9093&#39;]
+
+rule_files:
+
+scrape_configs:
+  - job_name: &#39;prometheus&#39;
+    scrape_interval: 5s
+    scrape_timeout: 5s
+    static_configs:
+      - targets: [&#39;localhost:9090&#39;]
+
+  - job_name: node
+    static_configs:
+      - targets: [&#39;localhost:9100&#39;]
+
+  - job_name: traefik
+    static_configs:
+      - targets: [&#39;localhost:8082&#39;]
+EOT
+
+sudo systemctl reload prometheus</code></pre>
 <h2 data-number="1.16" id="grafana"><span class="header-section-number">1.16</span> Grafana</h2>
 <pre class="shell"><code>sudo apt update
 sudo apt install -y apt-transport-https software-properties-common
@@ -1217,6 +1256,8 @@ group_dn = &quot;*&quot;
 org_role = &quot;Admin&quot;
 EOT
 
+sudo systemctl restart grafana-server
+
 # Visit https://grafana.felixs-sdi1.alphahorizon.io/?orgId=1 and login as `operator` using the password from above; they will be admin. If we had set up roles, logging in as `bean` using `password` would make them a viewer.
 
 # Now add a datasource, select Prometheus and use `http://localhost:9090` as the URL
@@ -1225,6 +1266,8 @@ EOT
 
 # Now go to Alerting, create alert with name `HostDiskWillFillIn24Hours` and type `Grafana managed alert` using the following query: `(node_filesystem_avail_bytes * 100) / node_filesystem_size_bytes &lt; 10 and ON (instance, device, mountpoint) predict_linear(node_filesystem_avail_bytes{fstype!~&quot;tmpfs&quot;}[1h], 24 * 3600) &lt; 0 and ON (instance, device, mountpoint) node_filesystem_readonly == 0`, `Filesystem is predicted to run out of space within the next 24 hours at current write rate\n VALUE = {{ $value }}\n LABELS: {{ $labels }}` as description, `Host disk will fill in 24 hours (instance {{ $labels.instance }})` as the summary and `serverity=warning` as the labels.
 
-# Now go to https://grafana.felixs-sdi1.alphahorizon.io/alerting/notifications/receivers/grafana-default-email/edit?alertmanager=grafana, enter your Email, and click on &quot;Test&quot;. Now check your inbox, a test mail should have arrived.</code></pre>
+# Now go to https://grafana.felixs-sdi1.alphahorizon.io/alerting/notifications/receivers/grafana-default-email/edit?alertmanager=grafana, enter your Email, and click on &quot;Test&quot;. Now check your inbox, a test mail should have arrived.
+
+# Now go to create, import and select `4475` as the ID (https://grafana.com/grafana/dashboards/4475), go to dashboard settings and select `apache@file` as the service</code></pre>
 </body>
 </html>
