@@ -3,7 +3,8 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Introduction - Uni Software Defined Infrastructure Notes</title>
+        <title>Uni Software Defined Infrastructure Notes</title>
+        <meta name="robots" content="noindex" />
         <!-- Custom HTML head -->
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
         <meta name="description" content="Notes for the software defined infrastructure course at HdM Stuttgart.">
@@ -75,7 +76,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded affix "><a href="index.html" class="active">Introduction</a></li><li class="chapter-item expanded "><a href="debian.html"><strong aria-hidden="true">1.</strong> Debian</a></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="index.html">Introduction</a></li><li class="chapter-item expanded "><a href="debian.html"><strong aria-hidden="true">1.</strong> Debian</a></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -145,23 +146,32 @@
 <p>Uni Software Defined Infrastructure Notes (c) 2022 Felix Pojtinger and contributors</p>
 <p>SPDX-License-Identifier: AGPL-3.0</p>
 <p>\newpage</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="debian"><a class="header" href="#debian">Debian</a></h1>
+<pre><code class="language-shell">sudo umount /dev/mmcblk0{,p1,p0}
+curl -L 'https://raspi.debian.net/tested/20210823_raspi_3_bullseye.img.xz' | xzcat &gt;/tmp/debian.img
+sudo dd if=/tmp/debian.img of=/dev/mmcblk0 bs=4M status=progress
+sync
+
+sudo mkdir -p /mnt/raspi-boot
+sudo mount /dev/mmcblk0p1 /mnt/raspi-boot
+{
+    echo &quot;root_pw=$(openssl rand -base64 12)&quot;
+    echo &quot;root_authorized_key=$(cat ~/.ssh/id_rsa.pub)&quot;
+    echo &quot;hostname=jeans-box&quot;
+} &gt;&gt;/mnt/raspi-boot/sysconf.txt
+sudo umount /dev/mmcblk0{,p1,p0}
+</code></pre>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                            <a rel="next" href="debian.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
-                                <i class="fa fa-angle-right"></i>
-                            </a>
                         <div style="clear: both"></div>
                     </nav>
                 </div>
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                    <a rel="next" href="debian.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
-                        <i class="fa fa-angle-right"></i>
-                    </a>
             </nav>
 
         </div>
@@ -177,5 +187,10 @@
         <script src="book.js" type="text/javascript" charset="utf-8"></script>
 
         <!-- Custom JS scripts -->
+        <script type="text/javascript">
+        window.addEventListener('load', function() {
+            window.setTimeout(window.print, 100);
+        });
+        </script>
     </body>
 </html>
