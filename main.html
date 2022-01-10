@@ -1,10 +1,13 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang xml:lang>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
   <meta charset="utf-8" />
   <meta name="generator" content="pandoc" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <meta name="author" content="Jakob Waibel" />
   <meta name="author" content="Felix Pojtinger" />
+  <meta name="dcterms.date" content="2022-01-10" />
+  <meta name="keywords" content="devops, sysadmin, sdi, hdm-stuttgart" />
   <title>Uni Software Defined Infrastructure Notes</title>
   <style>
     html {
@@ -22,7 +25,7 @@
       padding-top: 50px;
       padding-bottom: 50px;
       hyphens: auto;
-      overflow-wrap: break-word;
+      word-wrap: break-word;
       text-rendering: optimizeLegibility;
       font-kerning: normal;
     }
@@ -93,7 +96,6 @@
     pre code {
       padding: 0;
       overflow: visible;
-      overflow-wrap: normal;
     }
     .sourceCode {
      background-color: transparent;
@@ -152,11 +154,12 @@
 <body>
 <header id="title-block-header">
 <h1 class="title">Uni Software Defined Infrastructure Notes</h1>
+<p class="subtitle">Notes for the software defined infrastructure course at HdM Stuttgart</p>
+<p class="author">Jakob Waibel</p>
 <p class="author">Felix Pojtinger</p>
+<p class="date">2022-01-10</p>
 </header>
 <nav id="TOC" role="doc-toc">
-<ul>
-<li><a href="#uni-software-defined-infrastructure-notes"><span class="toc-section-number">1</span> Uni Software Defined Infrastructure Notes</a>
 <ul>
 <li><a href="#introduction"><span class="toc-section-number">1.1</span> Introduction</a>
 <ul>
@@ -183,25 +186,30 @@
 <li><a href="#nextcloud"><span class="toc-section-number">1.14</span> Nextcloud</a></li>
 <li><a href="#prometheus"><span class="toc-section-number">1.15</span> Prometheus</a></li>
 <li><a href="#grafana"><span class="toc-section-number">1.16</span> Grafana</a></li>
-</ul></li>
 </ul>
 </nav>
-<h1 data-number="1" id="uni-software-defined-infrastructure-notes"><span class="header-section-number">1</span> Uni Software Defined Infrastructure Notes</h1>
-<h2 data-number="1.1" id="introduction"><span class="header-section-number">1.1</span> Introduction</h2>
-<h3 data-number="1.1.1" id="contributing"><span class="header-section-number">1.1.1</span> Contributing</h3>
+<section id="introduction" data-number="0.1">
+<h2 data-number="1.1"><span class="header-section-number">1.1</span> Introduction</h2>
+<section id="contributing" data-number="0.1.1">
+<h3 data-number="1.1.1"><span class="header-section-number">1.1.1</span> Contributing</h3>
 <p>These study materials are heavily based on <a href="https://www.hdm-stuttgart.de/vorlesung_detail?vorlid=5213729">professor Goik’s “Software Defined Infrastructure” lecture at HdM Stuttgart</a>.</p>
 <p><strong>Found an error or have a suggestion?</strong> Please open an issue on GitHub (<a href="https://github.com/pojntfx/uni-sdi-notes">github.com/pojntfx/uni-sdi-notes</a>):</p>
 <figure>
-<img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAXIAAAFyAQAAAADAX2ykAAACjUlEQVR4nO2bTW7bMBCFv6kEaEkBOYCPIt2gRypypN5AOkoOEEBcGqDwuiBpuymaNKisWsVwJZPf4gGDNzP8sYnPjPnLp3Bw3nnnnXfeeed/x1sZbfkaY/kJsa6NO+pxfmN+kCQtIEnSFCRN4Ww20uSpffU4vzEfLw6NZjbGNk9rAoqTd9Xj/DZ8++a3AWjuG2x4ebu4gx7n780HCcLZytc/1+P83/DVokFABIZpbSE0MlhbAdxG+dH0O/9H/GxmZj1A7EROzbGTjay5fd5Xj/Mb8dm/Nw6dTwkIZ9N8ykl6Vz3O34O3EbAxmjEsa/Uqja7GtnFHPc5vxecNb97/Trm1SnlXJC2NNF3AjDyafuffH5f8vLYiGoIVG5a+rA9Ln7O37aPH+XvwJQOHhI2xU5k7Jerq6v3VMfmSnwlSTciNGJTQFBL5pFJK9eDy0fQ7/8Eo9XdpchgZFoCQqDGvoNff4/KaWM3G2EnPJ910VWY9ZE/vqcf5rfhLfk4wZP825SZpuppYyf17TP6Sn6tNcxj5qRJ7/T0sX/0LtZeq/gUa3ZRj9+8R+br/jU/Jhpc2laujMke9eOjk+99D86GcOptZl0+y8nXD3K9mY4354+p3/j3ezFr0bC2arrEMCYgtzL33z4fmrx2yfVsaweWmYajd1656nN+Kz/W3OrZJzP1ry6C11WwA8SkxW5N20uP8Xfjr+8kpdspZOY/cOnv9PThf30/aGM6m5x5yaGcz8/r7//DSUk41IJZO+uYQ+uH1O/8RH9t86sywrOVN9Ozvr47K//J+ch4xhu8tRhBGbJMRXiv3aPqdf3+UuOVemQYjLPWR+1cA1nqctYse57flzf/f7bzzzjvvvPO78z8AXJt6sdl3Cl8AAAAASUVORK5CYII=" width="150" alt="QR code to source repository" /><figcaption aria-hidden="true">QR code to source repository</figcaption>
+<img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAXIAAAFyAQAAAADAX2ykAAACYElEQVR4nO2bQYrjQAxFn8aGLCs3yFGcmzVzM/soOcCAvQzY/FlUlavSEGaaTpy4kRYhOG8h+Hy5JFVMfCWGX1/CwXnnnXfeeeedv8dbihaG4xK/M5gZTPm384b5OP9gvpMkjQBTGx/Zx9gIaCRJuuWfnY/zD+an1aGANIJ+HxcDIBp723ycfxYfZoBGdNG/r87H+QfzjRhOV7NzVPrl+Tj/DT4X3iBgAiMsbbLtdEQAtYvfLX/n/4sfzMzsCHSXg+zjcohHKzuTj9Ob5uP8g/jo3+JQDacZCFfTcLpaMvZ2+Tj/WJ7Y/HSaUX97qorPwhyRGP275e/8PyIJN1LJCEFSHxTlTt9c3x3y5OFFsW4WNHZKIY023L+75HN9Hot/ZyBW5TkOtqpfXd+d8ev7N8t4a1310c5Jadd3b3z2ZRE0SNLY5HF0UB2u7874tT6n9285X5HeyRl0/+6Rr/ujtVKrB4rIVZPk+u6Un1oYypqIRuqnFjpdrTLx2+bv/J1IvsxdUT3kWFsj7393y1f1GWiq0Ub+mOMky/XdJb/OnxtZ1y8GUxvXggbtbIRt83H+GbydAZgOefR8aZF0tXRdZzrkM9d75u/8vaj2R4IZCH8MwkzcCHY9GCxG12+Rj/PP4Mv9SelyWI/OUvJvmHH/7pnv8hLJLF7NWUtzmG8apzfN3/l7UfYLaRdIuj9Z+qOkvp+ffwBvZ8Ds2IhuXNJoY/D7OT+FLwujT0NKO78kH+e/x9dTZ415FwhQdkplOu31eW/8en8DWOdX9SYYyOt+13d/vPn/u5133nnnnXd+c/4vIAb3ADhcDL8AAAAASUVORK5CYII=" width="150" alt="QR code to source repository" /><figcaption aria-hidden="true">QR code to source repository</figcaption>
 </figure>
 <p>If you like the study materials, a GitHub star is always appreciated :)</p>
-<h3 data-number="1.1.2" id="license"><span class="header-section-number">1.1.2</span> License</h3>
+</section>
+<section id="license" data-number="0.1.2">
+<h3 data-number="1.1.2"><span class="header-section-number">1.1.2</span> License</h3>
 <figure>
 <img src="data:image/png;base64,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" width="128" alt="AGPL-3.0 license badge" /><figcaption aria-hidden="true">AGPL-3.0 license badge</figcaption>
 </figure>
 <p>Uni Software Defined Infrastructure Notes (c) 2021 Felix Pojtinger and contributors</p>
-<p>SPDX-License-Identifier: AGPL-3.0 </p>
-<h2 data-number="1.2" id="hosts"><span class="header-section-number">1.2</span> Hosts</h2>
+<p>SPDX-License-Identifier: AGPL-3.0</p>
+</section>
+</section>
+<section id="hosts" data-number="0.2">
+<h2 data-number="1.2"><span class="header-section-number">1.2</span> Hosts</h2>
 <p>Add the following A and AAAA records to a public DNS server (with root domain <code>alphahorizon.io</code>):</p>
 <pre class="zone"><code>felixs-sdi1     10800   IN      A       138.68.70.72
 felixs-sdi1     10800   IN      AAAA    2a03:b0c0:3:d0::e34:5001
@@ -211,12 +219,16 @@ felixs-sdi2     10800   IN      A       159.223.25.154
 felixs-sdi2     10800   IN      AAAA    2a03:b0c0:3:d0::1092:b001
 *.felixs-sdi2   10800   IN      A       159.223.25.154
 *.felixs-sdi2   10800   IN      AAAA    2a03:b0c0:3:d0::1092:b001</code></pre>
-<h2 data-number="1.3" id="user"><span class="header-section-number">1.3</span> User</h2>
+</section>
+<section id="user" data-number="0.3">
+<h2 data-number="1.3"><span class="header-section-number">1.3</span> User</h2>
 <pre class="shell"><code>ssh root@felixs-sdi1.alphahorizon.io
 adduser pojntfx
 usermod -aG sudo pojntfx
 su pojntfx</code></pre>
-<h2 data-number="1.4" id="ssh"><span class="header-section-number">1.4</span> SSH</h2>
+</section>
+<section id="ssh" data-number="0.4">
+<h2 data-number="1.4"><span class="header-section-number">1.4</span> SSH</h2>
 <pre class="shell"><code>sudo apt update
 sudo apt install -y openssh-server
 sudo systemctl enable --now ssh
@@ -225,7 +237,9 @@ chmod 700 ~/.ssh
 curl &#39;https://github.com/pojntfx.keys&#39; | tee -a ~/.ssh/authorized_keys
 chmod 600 ~/.ssh/authorized_keys
 exit</code></pre>
-<h2 data-number="1.5" id="ufw"><span class="header-section-number">1.5</span> UFW</h2>
+</section>
+<section id="ufw" data-number="0.5">
+<h2 data-number="1.5"><span class="header-section-number">1.5</span> UFW</h2>
 <pre class="shell"><code>ssh pojntfx@felixs-sdi1.alphahorizon.io
 sudo apt update
 sudo apt install -y ufw
@@ -234,7 +248,9 @@ sudo ufw default deny incoming
 sudo ufw default allow outgoing
 sudo ufw allow OpenSSH
 sudo ufw enable</code></pre>
-<h2 data-number="1.6" id="apt"><span class="header-section-number">1.6</span> APT</h2>
+</section>
+<section id="apt" data-number="0.6">
+<h2 data-number="1.6"><span class="header-section-number">1.6</span> APT</h2>
 <pre class="shell"><code>sudo apt update
 sudo apt install -y unattended-upgrades
 
@@ -249,7 +265,9 @@ sudo dpkg-reconfigure unattended-upgrades # Answer with yes
 sudo systemctl enable --now unattended-upgrades
 sudo unattended-upgrades --debug # Test the configuration; this will install the available updates right now
 sudo reboot # If required</code></pre>
-<h2 data-number="1.7" id="traefik"><span class="header-section-number">1.7</span> Traefik</h2>
+</section>
+<section id="traefik" data-number="0.7">
+<h2 data-number="1.7"><span class="header-section-number">1.7</span> Traefik</h2>
 <pre class="shell"><code>$ sudo apt update
 $ sudo apt install -y docker.io
 $ sudo systemctl enable --now docker
@@ -458,15 +476,20 @@ $ sudo ufw allow &#39;8443/tcp&#39;
 $ ssh pojntfx@felixs-sdi1.alphahorizon.io # Connect using SSH without Traefik
 $ ssh -p 8443 pojntfx@felixs-sdi1.alphahorizon.io # Connect using SSH over Traefik without TLS
 $ ssh -o ProxyCommand=&quot;openssl s_client -connect ssh.felixs-sdi1.alphahorizon.io:443 -quiet&quot; pojntfx # Connect using SSH over Traefik with TLS</code></pre>
-<h2 data-number="1.8" id="cockpit"><span class="header-section-number">1.8</span> Cockpit</h2>
+</section>
+<section id="cockpit" data-number="0.8">
+<h2 data-number="1.8"><span class="header-section-number">1.8</span> Cockpit</h2>
 <pre class="shell"><code>echo &#39;deb http://deb.debian.org/debian bullseye-backports main&#39; | sudo tee /etc/apt/sources.list.d/backports.list
 sudo apt update
 sudo apt install -t bullseye-backports -y cockpit
 
 sudo sed -i /lib/systemd/system/cockpit.socket -e &#39;s/ListenStream=9090/ListenStream=9091/g&#39;
 sudo systemctl daemon-reload</code></pre>
-<h2 data-number="1.9" id="dns"><span class="header-section-number">1.9</span> DNS</h2>
-<h3 data-number="1.9.1" id="manager"><span class="header-section-number">1.9.1</span> Manager</h3>
+</section>
+<section id="dns" data-number="0.9">
+<h2 data-number="1.9"><span class="header-section-number">1.9</span> DNS</h2>
+<section id="manager" data-number="0.9.1">
+<h3 data-number="1.9.1"><span class="header-section-number">1.9.1</span> Manager</h3>
 <pre class="shell"><code>sudo apt update
 sudo apt install -y bind9 bind9utils
 sudo systemctl enable --now named
@@ -560,7 +583,9 @@ sudo named-checkzone 70.68.138.in-addr.arpa. /etc/bind/db.70.68.138
 sudo named-checkzone 1.0.0.5.4.3.e.0.0.0.0.0.0.0.0.0.0.d.0.0.3.0.0.0.0.c.0.b.3.0.a.2.ip6.arpa. /etc/bind/db.1.0.0.5.4.3.e.0.0.0.0.0.0.0.0.0.0.d.0.0.3.0.0.0.0.c.0.b.3.0.a.2
 
 sudo systemctl reload named</code></pre>
-<h3 data-number="1.9.2" id="worker"><span class="header-section-number">1.9.2</span> Worker</h3>
+</section>
+<section id="worker" data-number="0.9.2">
+<h3 data-number="1.9.2"><span class="header-section-number">1.9.2</span> Worker</h3>
 <pre class="shell"><code>sudo apt update
 sudo apt install -y bind9 bind9utils
 sudo systemctl enable --now named
@@ -600,7 +625,9 @@ EOT
 
 sudo named-checkconf
 sudo systemctl reload named</code></pre>
-<h3 data-number="1.9.3" id="exercises"><span class="header-section-number">1.9.3</span> Exercises</h3>
+</section>
+<section id="exercises" data-number="0.9.3">
+<h3 data-number="1.9.3"><span class="header-section-number">1.9.3</span> Exercises</h3>
 <p><strong>Use the dig command to query A/CNAME/MX/NS records from various machines/domains of your choice. Then execute reverse lookups as well.</strong></p>
 <pre class="shell"><code># Get A/AAA records from manager server
 $ dig +noall +answer @138.68.70.72 example.pojtinger A
@@ -638,7 +665,10 @@ felix.pojtinger.com.    123     IN      CNAME   cname.vercel-dns.com.</code></pr
 <pre class="shell"><code># Get MX record
 $ dig +noall +answer @159.223.25.154 example.pojtinger MX
 example.pojtinger.      3600    IN      MX      1 fb.mail.gandi.net.</code></pre>
-<h2 data-number="1.10" id="ldap"><span class="header-section-number">1.10</span> LDAP</h2>
+</section>
+</section>
+<section id="ldap" data-number="0.10">
+<h2 data-number="1.10"><span class="header-section-number">1.10</span> LDAP</h2>
 <pre class="shell"><code>sudo apt update
 sudo apt install -y slapd ldap-utils certbot
 
@@ -831,7 +861,9 @@ EOT
 
 # And test if we can access using a user
 ldapwhoami -H &#39;ldaps://ldap.felixs-sdi1.alphahorizon.io:443&#39; -W -D uid=bean,ou=devel,ou=software,ou=departments,dc=ldap,dc=felixs-sdi1,dc=alphahorizon,dc=io # As bean using password &quot;password&quot;</code></pre>
-<h2 data-number="1.11" id="apache"><span class="header-section-number">1.11</span> Apache</h2>
+</section>
+<section id="apache" data-number="0.11">
+<h2 data-number="1.11"><span class="header-section-number">1.11</span> Apache</h2>
 <pre class="shell"><code>sudo apt update
 sudo apt install -y apache2
 sudo vi /etc/apache2/ports.conf # Now replace/add the following:
@@ -962,7 +994,9 @@ ldapwhoami -H &#39;ldap://localhost:389&#39; -W -D uid=bean,ou=devel,ou=software
 
 curl https://secure.apache.felixs-sdi1.alphahorizon.io/ # Try to access the secure site anonymously (401 Unauthorized)
 curl -u bean:password https://secure.apache.felixs-sdi1.alphahorizon.io/ # Access the secure site as bean (or anyone else in ou=devel,ou=software) with password &quot;password&quot; (you can also open it using a browser)</code></pre>
-<h2 data-number="1.12" id="mariadb-and-phpmyadmin"><span class="header-section-number">1.12</span> MariaDB and phpMyAdmin</h2>
+</section>
+<section id="mariadb-and-phpmyadmin" data-number="0.12">
+<h2 data-number="1.12"><span class="header-section-number">1.12</span> MariaDB and phpMyAdmin</h2>
 <pre class="shell"><code>sudo apt update
 sudo apt install -y mariadb-server
 sudo mysql_secure_installation # Empty string, y, y, yourpassword, yourpassword, y, y, y, y
@@ -1009,7 +1043,9 @@ sudo a2ensite phpmyadmin.felixs-sdi1.alphahorizon.io
 sudo systemctl reload apache2
 
 # Now visit https://phpmyadmin.felixs-sdi1.alphahorizon.io/ and login as root using yourpassword</code></pre>
-<h2 data-number="1.13" id="ldap-account-manager"><span class="header-section-number">1.13</span> LDAP Account Manager</h2>
+</section>
+<section id="ldap-account-manager" data-number="0.13">
+<h2 data-number="1.13"><span class="header-section-number">1.13</span> LDAP Account Manager</h2>
 <pre class="shell"><code>sudo apt update
 sudo apt install -y ldap-account-manager
 
@@ -1085,7 +1121,9 @@ sudo systemctl reload apache2
 # - Delete &quot;groups&quot; under &quot;Account types&quot;
 
 # Now visit https://ldap-account-manager.felixs-sdi1.alphahorizon.io/templates/login.php and login with your the LDAP admin account password</code></pre>
-<h2 data-number="1.14" id="nextcloud"><span class="header-section-number">1.14</span> Nextcloud</h2>
+</section>
+<section id="nextcloud" data-number="0.14">
+<h2 data-number="1.14"><span class="header-section-number">1.14</span> Nextcloud</h2>
 <pre class="shell"><code>sudo apt update
 sudo apt install -y libapache2-mod-php php-ctype php-curl php-dom php-gd php-iconv php-json php-xml php-mbstring php-posix php-simplexml php-xmlreader php-xmlwriter php-zip php-mysql php-fileinfo php-bz2 php-intl php-ldap php-ftp php-imap php-bcmath php-gmp php-exif php-apcu php-imagick php-phar ffmpeg libreoffice curl unzip
 
@@ -1149,7 +1187,9 @@ curl https://nextcloud.felixs-sdi1.alphahorizon.io/ # Access the Nextcloud insta
 # - Set `organizationUnit` under `Only these object classes:` in the groups settings
 # - Click `Verify settings and count the groups`
 # - Visit https://nextcloud.felixs-sdi1.alphahorizon.io/index.php/login and login as bean using password &quot;password&quot; (if you can&#39;t login, go back to https://nextcloud.felixs-sdi1.alphahorizon.io/index.php/settings/admin/ldap and verify everything again)</code></pre>
-<h2 data-number="1.15" id="prometheus"><span class="header-section-number">1.15</span> Prometheus</h2>
+</section>
+<section id="prometheus" data-number="0.15">
+<h2 data-number="1.15"><span class="header-section-number">1.15</span> Prometheus</h2>
 <pre class="shell"><code>sudo apt update
 sudo apt install -y prometheus
 
@@ -1186,7 +1226,9 @@ scrape_configs:
 EOT
 
 sudo systemctl reload prometheus</code></pre>
-<h2 data-number="1.16" id="grafana"><span class="header-section-number">1.16</span> Grafana</h2>
+</section>
+<section id="grafana" data-number="0.16">
+<h2 data-number="1.16"><span class="header-section-number">1.16</span> Grafana</h2>
 <pre class="shell"><code>sudo apt update
 sudo apt install -y apt-transport-https software-properties-common
 
@@ -1269,5 +1311,6 @@ sudo systemctl restart grafana-server
 # Now go to https://grafana.felixs-sdi1.alphahorizon.io/alerting/notifications/receivers/grafana-default-email/edit?alertmanager=grafana, enter your Email, and click on &quot;Test&quot;. Now check your inbox, a test mail should have arrived.
 
 # Now go to create, import and select `4475` as the ID (https://grafana.com/grafana/dashboards/4475), go to dashboard settings and select `apache@file` as the service</code></pre>
+</section>
 </body>
 </html>
